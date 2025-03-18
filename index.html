@@ -12,7 +12,10 @@
         <h1 class="text-2xl font-bold">
           <img src="https://img.shields.io/badge/sudoself-badgebuilder-pink" alt="Badge Preview">
         </h1>
-        <a class="github-button" href="https://github.com/sudo-self/badge-builder" data-color-scheme="no-preference: light_high_contrast; light: light; dark: light_high_contrast;" data-icon="octicon-star" data-size="large" aria-label="Star sudo-self/badge-builder on GitHub">Star</a>
+        <div class="flex space-x-2">
+          <a class="github-button" href="https://github.com/sudo-self/badge-builder" data-color-scheme="no-preference: light_high_contrast; light: light; dark: light_high_contrast;" data-icon="octicon-star" data-size="large" aria-label="Star sudo-self/badge-builder on GitHub">Star</a>
+          <a class="github-button" href="https://github.com/buttons/github-buttons/fork" data-color-scheme="no-preference: light; light: light; dark: light;" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork buttons/github-buttons on GitHub">Fork</a>
+        </div>
       </div>
 
       <div class="space-y-2">
@@ -21,25 +24,20 @@
         <input type="text" id="color" placeholder="Enter color" class="w-full p-2 bg-gray-700 border border-gray-600 rounded" oninput="updateBadge()">
       </div>
 
-      <h2 class="text-xl font-bold mt-4">
-  
-      </h2>
+      <h2 class="text-xl font-bold mt-4"></h2>
       <img id="badge" src="https://img.shields.io/badge/This%20Badge%20was%20Made%20with-Shields.io-pink" alt="Badge Preview" class="border border-white rounded p-2 mt-2 mx-auto">
 
       <div class="mt-6"></div>
 
-      <h2 class="text-xl font-bold mt-4">
-
-      </h2>
+      <h2 class="text-xl font-bold mt-4"></h2>
       <div class="flex items-center gap-2 bg-gray-700 text-sm p-2 rounded mx-auto">
         <p id="badgeLinkDisplay" class="break-all flex-grow"></p>
-       <button onclick="copyToClipboard()" class="bg-gray-700 text-white px-2 py-1 rounded hover:bg-pinh-700">
-  <img src="./copy.png" alt="Copy Icon" width="40" height=40">
-</button>
-
+        <button onclick="copyToClipboard()" class="bg-gray-700 text-white px-2 py-1 rounded hover:bg-pinh-700">
+          <img src="./copy.png" alt="Copy Icon" width="40" height="40">
+        </button>
       </div>
-      <input type="text" id="badgeLinkHidden" class="hidden">
 
+      <input type="text" id="badgeLinkHidden" class="hidden">
       <div id="toast" class="hidden fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-300 text-black px-4 py-2 rounded shadow-md">Badge copied</div>
     </div>
   </div>
@@ -49,6 +47,7 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>
+
 
 
 
