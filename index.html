@@ -1,42 +1,86 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>Untitled</title>
-  
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>sudo-self.github.io/badge-builder</title>
+  </head>
+  <body>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <body
+      class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4"
+    >
+      <a
+        class="github-button"
+        href="https://github.com/sudo-self/badge-builder"
+        data-color-scheme="no-preference: light_high_contrast; light: light; dark: light_high_contrast;"
+        data-icon="octicon-star"
+        data-size="large"
+        aria-label="Star sudo-self/badge-builder on GitHub"
+        >Star</a
+      >
+      <div
+        class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md text-center"
+      >
+        <h1 class="text-2xl font-bold mb-4">
+          Badge Builder <br />
+          <img
+            src="https://img.shields.io/badge/Badge-Builder-pink"
+            alt="Badge Preview"
+          />
+        </h1>
+        <div class="space-y-2">
+          <input
+            type="text"
+            id="label"
+            placeholder="Enter label"
+            class="w-full p-2 bg-gray-700 border border-gray-600 rounded"
+            oninput="updateBadge()"
+          />
+          <input
+            type="text"
+            id="message"
+            placeholder="Enter message"
+            class="w-full p-2 bg-gray-700 border border-gray-600 rounded"
+            oninput="updateBadge()"
+          />
+          <input
+            type="text"
+            id="color"
+            placeholder="Enter color"
+            class="w-full p-2 bg-gray-700 border border-gray-600 rounded"
+            oninput="updateBadge()"
+          />
+        </div>
 
-</head>
-<body>
-<script src="https://cdn.tailwindcss.com"></script>
-</head>
+        <h2 class="text-xl font-bold mt-4">Preview</h2>
+        <img
+          id="badge"
+          src="https://img.shields.io/badge/This%20Badge%20was%20Made%20with-Shields.io-blue"
+          alt="Badge Preview"
+          class="border border-white rounded p-2 mt-2"
+        />
 
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
-  <a class="github-button" href="https://github.com/sudo-self/badge-builder" data-color-scheme="no-preference: light_high_contrast; light: light; dark: light_high_contrast;" data-icon="octicon-star" data-size="large" aria-label="Star sudo-self/badge-builder on GitHub">Star</a>
-  <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md text-center">
+        <h2 class="text-xl font-bold mt-4">Badge HTML Code</h2>
+        <div class="flex items-center gap-2 bg-gray-700 text-sm p-2 rounded">
+          <p id="badgeLinkDisplay" class="break-all flex-grow"></p>
+          <button
+            onclick="copyToClipboard()"
+            class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+          >
+            📋
+          </button>
+        </div>
+        <input type="text" id="badgeLinkHidden" class="hidden" />
 
-    <h1 class="text-2xl font-bold mb-4">
-      Badge Builder <br />
-      <img src="https://img.shields.io/badge/Badge-Builder-pink" alt="Badge Preview">
-    </h1>
-    <div class="space-y-2">
-      <input type="text" id="label" placeholder="Enter label" class="w-full p-2 bg-gray-700 border border-gray-600 rounded" oninput="updateBadge()">
-      <input type="text" id="message" placeholder="Enter message" class="w-full p-2 bg-gray-700 border border-gray-600 rounded" oninput="updateBadge()">
-      <input type="text" id="color" placeholder="Enter color" class="w-full p-2 bg-gray-700 border border-gray-600 rounded" oninput="updateBadge()">
-    </div>
-
-    <h2 class="text-xl font-bold mt-4">Preview</h2>
-    <img id="badge" src="https://img.shields.io/badge/This%20Badge%20was%20Made%20with-Shields.io-blue" alt="Badge Preview" class="border border-white rounded p-2 mt-2">
-
-    <h2 class="text-xl font-bold mt-4">Badge HTML Code</h2>
-    <div class="flex items-center gap-2 bg-gray-700 text-sm p-2 rounded">
-      <p id="badgeLinkDisplay" class="break-all flex-grow"></p>
-      <button onclick="copyToClipboard()" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">📋</button>
-    </div>
-    <input type="text" id="badgeLinkHidden" class="hidden">
-
-    <div id="toast" class="hidden fixed bottom-18 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white px-4 py-2 rounded shadow-md">Badge copied!</div>
-  </div>
-  <script  src="./script.js"></script>
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-</body>
+        <div
+          id="toast"
+          class="hidden fixed bottom-18 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white px-4 py-2 rounded shadow-md"
+        >
+          Badge copied!
+        </div>
+      </div>
+      <script src="./script.js"></script>
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </body>
+  </body>
 </html>
