@@ -293,6 +293,23 @@ const copyToClipboard = async () => {
                     className="max-w-full h-auto transition-transform duration-300 hover:scale-105"
                   />
                 </div>
+                      {/* Badge Syntax Display */}
+<div className="mt-4 space-y-2">
+  <h3 className="font-semibold text-md">Badge URL</h3>
+  <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg overflow-x-auto">
+    <code className="text-sm font-mono break-all">
+      {generateBadgeUrl()}
+    </code>
+  </div>
+
+  <h3 className="font-semibold text-md mt-2">HTML Usage</h3>
+  <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg overflow-x-auto">
+    <code className="text-sm font-mono break-all">
+      {`<img src="${generateBadgeUrl()}" alt="${badgeConfig.label} - ${badgeConfig.message}" />`}
+    </code>
+  </div>
+</div>
+
                 
                 <div className="mt-6 space-y-3">
                   <button
