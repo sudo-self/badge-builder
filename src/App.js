@@ -17,7 +17,8 @@ function App() {
   const [previewMode, setPreviewMode] = useState('light');
 
   const colorOptions = [
-    'brightgreen', 'green', 'yellow', 'yellowgreen', 'orange', 'red', 'blue', 'lightgrey', 'pink', 'purple'
+    'brightgreen', 'green', 'yellow', 'yellowgreen', 'orange',
+    'red', 'blue', 'lightgrey', 'pink', 'purple'
   ];
 
   const logoOptions = [
@@ -33,28 +34,39 @@ function App() {
     { name: 'JavaScript', value: 'javascript' },
   ];
 
-  const styleOptions = ['flat', 'plastic', 'flat-square', 'for-the-badge'];
+  const styleOptions = [
+    { name: 'Flat', value: 'flat' },
+    { name: 'Plastic', value: 'plastic' },
+    { name: 'Flat Square', value: 'flat-square' },
+    { name: 'For the Badge', value: 'for-the-badge' }
+  ];
 
   const updateBadgeConfig = (key, value) => {
     setBadgeConfig(prev => ({ ...prev, [key]: value }));
   };
 
   const generateBadgeUrl = () => {
-    let { label, message, color, style, logo, logoColor, labelColor, isError } = badgeConfig;
-    if (isError) color = 'red';
+    const { label, message, color, style, logo, logoColor, labelColor, isError } = badgeConfig;
+    const finalColor = isError ? 'red' : color;
+    
     const params = new URLSearchParams();
     if (style && style !== 'flat') params.append('style', style);
     if (logo) params.append('logo', logo);
     if (logoColor && logoColor !== 'white') params.append('logoColor', logoColor);
     if (labelColor) params.append('labelColor', labelColor);
-    return `https://img.shields.io/badge/${encodeURIComponent(label)}-${encodeURIComponent(message)}-${color}${params.toString() ? `?${params.toString()}` : ''}`;
+    
+    const queryString = params.toString() ? `?${params.toString()}` : '';
+    return `https://img.shields.io/badge/${encodeURIComponent(label)}-${encodeURIComponent(message)}-${finalColor}${queryString}`;
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(generateBadgeUrl()).then(() => {
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(generateBadgeUrl());
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    });
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
   };
 
   const downloadBadge = () => {
@@ -66,111 +78,261 @@ function App() {
     document.body.removeChild(link);
   };
 
-  return (
-    <div className={`min-h-screen p-4 flex items-center justify-center transition-colors duration-300 ${previewMode === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}>
-      <div className={`w-full max-w-3xl rounded-xl shadow-2xl overflow-hidden transition-colors duration-300 ${previewMode === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
-        {/* Header */}
-        <div className={`p-6 border-b transition-colors duration-300 ${previewMode === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
-          <div className="flex justify-between items-center">
-          <h1 className="flex justify-center items-center space-x-2">
-            <img
-              src="https://img.shields.io/badge/sudo_self-badge_builder-pink?logo=github"
-              alt="Badge"
-              className="h-8 w-auto"
-            />
-          </h1>
+  const getInputClasses = () =>
+    `w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-200 ${
+      previewMode === 'dark' 
+        ? 'bg-gray-700 border-gray-600 text-white' 
+        : 'bg-white border-gray-300 text-gray-900'
+    }`;
 
+  const getSelectClasses = () =>
+    `w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-200 ${
+      previewMode === 'dark' 
+        ? 'bg-gray-700 border-gray-600 text-white' 
+        : 'bg-white border-gray-300 text-gray-900'
+    }`;
+
+  return (
+    <div className={`min-h-screen p-4 flex items-center justify-center transition-colors duration-300 ${
+      previewMode === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'
+    }`}>
+      <div className={`w-full max-w-4xl rounded-2xl shadow-xl overflow-hidden transition-colors duration-300 ${
+        previewMode === 'dark' ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        
+        {/* Header */}
+        <div className={`p-6 border-b transition-colors duration-300 ${
+          previewMode === 'dark' ? 'border-gray-700' : 'border-gray-200'
+        }`}>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="flex items-center space-x-3">
+              <div className={`p-2 rounded-lg ${
+                previewMode === 'dark' ? 'bg-pink-900' : 'bg-pink-100'
+              }`}>
+                <svg className="w-6 h-6 text-pink-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold">Badge Builder</h1>
+                <p className={`text-sm ${
+                  previewMode === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                }`}>
+                  Create beautiful shields.io badges
+                </p>
+              </div>
+            </div>
+            
             <button
               onClick={() => setPreviewMode(prev => prev === 'light' ? 'dark' : 'light')}
-              className={`px-4 py-2 rounded-md transition-colors duration-200 ${previewMode === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'}`}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2 ${
+                previewMode === 'dark' 
+                  ? 'bg-gray-700 hover:bg-gray-600 text-white' 
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+              }`}
             >
-              {previewMode === 'light' ? 'Dark' : 'Light'} Mode
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {previewMode === 'light' ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                )}
+              </svg>
+              <span>{previewMode === 'light' ? 'Dark' : 'Light'} Mode</span>
             </button>
           </div>
         </div>
 
         <div className="p-6">
           {/* Tabs */}
-          <div className="flex border-b mb-6">
+          <div className="flex border-b mb-8">
             {['basic', 'advanced'].map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`py-2 px-4 font-medium transition-colors duration-200 ${activeTab === tab ? 'border-b-2 border-pink-600 text-pink-600' : 'text-gray-500 hover:text-pink-600'}`}
+                className={`py-3 px-6 font-medium transition-colors duration-200 relative ${
+                  activeTab === tab 
+                    ? 'text-pink-600' 
+                    : `${previewMode === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`
+                }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                {activeTab === tab && (
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-pink-600"></div>
+                )}
               </button>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Config Panel */}
-            <div className="space-y-4">
-              <div>
-                <label className="block mb-1 font-medium">Label</label>
-                <input type="text" value={badgeConfig.label} onChange={e => updateBadgeConfig('label', e.target.value)} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"/>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block mb-2 font-semibold">Label</label>
+                  <input
+                    type="text"
+                    value={badgeConfig.label}
+                    onChange={e => updateBadgeConfig('label', e.target.value)}
+                    className={getInputClasses()}
+                  />
+                </div>
+                <div>
+                  <label className="block mb-2 font-semibold">Message</label>
+                  <input
+                    type="text"
+                    value={badgeConfig.message}
+                    onChange={e => updateBadgeConfig('message', e.target.value)}
+                    className={getInputClasses()}
+                  />
+                </div>
               </div>
+
               <div>
-                <label className="block mb-1 font-medium">Message</label>
-                <input type="text" value={badgeConfig.message} onChange={e => updateBadgeConfig('message', e.target.value)} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"/>
-              </div>
-              <div>
-                <label className="block mb-1 font-medium">Color</label>
-                <select value={badgeConfig.color} onChange={e => updateBadgeConfig('color', e.target.value)} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400">
-                  {colorOptions.map(c => <option key={c} value={c}>{c}</option>)}
+                <label className="block mb-2 font-semibold">Color</label>
+                <select
+                  value={badgeConfig.color}
+                  onChange={e => updateBadgeConfig('color', e.target.value)}
+                  className={getSelectClasses()}
+                >
+                  {colorOptions.map(color => (
+                    <option key={color} value={color}>
+                      {color.charAt(0).toUpperCase() + color.slice(1)}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               {activeTab === 'advanced' && (
-                <>
+                <div className="space-y-6 border-t pt-6">
                   <div>
-                    <label className="block mb-1 font-medium">Style</label>
-                    <select value={badgeConfig.style} onChange={e => updateBadgeConfig('style', e.target.value)} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400">
-                      {styleOptions.map(s => <option key={s} value={s}>{s}</option>)}
+                    <label className="block mb-2 font-semibold">Style</label>
+                    <select
+                      value={badgeConfig.style}
+                      onChange={e => updateBadgeConfig('style', e.target.value)}
+                      className={getSelectClasses()}
+                    >
+                      {styleOptions.map(style => (
+                        <option key={style.value} value={style.value}>
+                          {style.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
-                  <div>
-                    <label className="block mb-1 font-medium">Logo</label>
-                    <select value={badgeConfig.logo} onChange={e => updateBadgeConfig('logo', e.target.value)} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400">
-                      {logoOptions.map(l => <option key={l.value} value={l.value}>{l.name}</option>)}
-                    </select>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block mb-2 font-semibold">Logo</label>
+                      <select
+                        value={badgeConfig.logo}
+                        onChange={e => updateBadgeConfig('logo', e.target.value)}
+                        className={getSelectClasses()}
+                      >
+                        {logoOptions.map(logo => (
+                          <option key={logo.value} value={logo.value}>
+                            {logo.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block mb-2 font-semibold">Logo Color</label>
+                      <input
+                        type="text"
+                        value={badgeConfig.logoColor}
+                        onChange={e => updateBadgeConfig('logoColor', e.target.value)}
+                        className={getInputClasses()}
+                        placeholder="white, black, #FF0000"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block mb-1 font-medium">Logo Color</label>
-                    <input type="text" value={badgeConfig.logoColor} onChange={e => updateBadgeConfig('logoColor', e.target.value)} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400" placeholder="white, black, #FF0000"/>
+
+                  <div className="flex items-center space-x-3 p-4 rounded-lg border transition-colors duration-200 
+                    bg-opacity-50 border-opacity-50
+                    hover:bg-opacity-100 hover:border-opacity-100
+                    active:bg-opacity-100 active:border-opacity-100
+                    focus-within:bg-opacity-100 focus-within:border-opacity-100
+                    cursor-pointer
+                    bg-pink-50 border-pink-200 text-pink-800
+                    dark:bg-pink-900 dark:border-pink-700 dark:text-pink-200"
+                    onClick={() => updateBadgeConfig('isError', !badgeConfig.isError)}
+                  >
+                    <div className={`w-5 h-5 border-2 rounded flex items-center justify-center transition-colors duration-200 ${
+                      badgeConfig.isError 
+                        ? 'bg-pink-500 border-pink-500' 
+                        : `${previewMode === 'dark' ? 'border-gray-500' : 'border-gray-300'}`
+                    }`}>
+                      {badgeConfig.isError && (
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="font-medium">Error Style (forces red color)</span>
                   </div>
-                  <div className="flex items-center gap-2 mt-2">
-                    <input type="checkbox" checked={badgeConfig.isError} onChange={e => updateBadgeConfig('isError', e.target.checked)} className="h-4 w-4"/>
-                    <label className="font-medium">Error Style (red)</label>
-                  </div>
-                </>
+                </div>
               )}
             </div>
 
             {/* Preview Panel */}
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Preview</h2>
-              <img src={generateBadgeUrl()} alt="Badge Preview" className="max-w-full h-auto border p-2 rounded-md shadow"/>
-              <div className="flex gap-3">
-                <button onClick={copyToClipboard} className="flex-1 px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-md transition-colors duration-200">Copy URL</button>
-                <button onClick={downloadBadge} className="flex-1 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition-colors duration-200">Download</button>
+            <div className="space-y-6">
+              <div className={`p-6 rounded-xl border-2 transition-colors duration-300 ${
+                previewMode === 'dark' 
+                  ? 'bg-gray-900 border-gray-700' 
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
+                <h2 className="text-lg font-semibold mb-4">Preview</h2>
+                <div className="flex justify-center p-4">
+                  <img
+                    src={generateBadgeUrl()}
+                    alt="Badge Preview"
+                    className="max-w-full h-auto transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
+                
+                <div className="mt-6 space-y-3">
+                  <button
+                    onClick={copyToClipboard}
+                    className="w-full px-4 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <span>Copy URL</span>
+                  </button>
+                  
+                  <button
+                    onClick={downloadBadge}
+                    className="w-full px-4 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center space-x-2
+                      border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900
+                      dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-300 dark:hover:text-white"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>Download SVG</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Toast */}
+      {/* Toast Notification */}
       {copied && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-5 py-3 rounded-md shadow-lg animate-fadeIn">
-          Badge URL copied!
+        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg animate-fadeIn flex items-center space-x-2">
+          <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+          <span>Badge URL copied to clipboard!</span>
         </div>
       )}
 
       <style jsx>{`
         @keyframes fadeIn {
-          0% { opacity: 0; transform: translateY(10px); }
-          100% { opacity: 1; transform: translateY(0); }
+          0% { opacity: 0; transform: translate(-50%, 10px); }
+          100% { opacity: 1; transform: translate(-50%, 0); }
         }
         .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
       `}</style>
@@ -179,4 +341,6 @@ function App() {
 }
 
 export default App;
+
+
 
