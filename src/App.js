@@ -72,7 +72,14 @@ function App() {
         {/* Header */}
         <div className={`p-6 border-b transition-colors duration-300 ${previewMode === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold tracking-wide">Badge Builder</h1>
+          <h1 className="flex justify-center items-center space-x-2">
+            <img
+              src="https://img.shields.io/badge/sudo_self-badge_builder-pink?logo=github"
+              alt="Badge"
+              className="h-8 w-auto"
+            />
+          </h1>
+
             <button
               onClick={() => setPreviewMode(prev => prev === 'light' ? 'dark' : 'light')}
               className={`px-4 py-2 rounded-md transition-colors duration-200 ${previewMode === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'}`}
