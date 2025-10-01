@@ -118,7 +118,7 @@ function App() {
                 <p className={`text-sm ${
                   previewMode === 'dark' ? 'text-gray-400' : 'text-gray-600'
                 }`}>
-                  Create beautiful shields.io badges
+                 badge-build.netlify.app
                 </p>
               </div>
             </div>
