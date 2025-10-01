@@ -296,7 +296,7 @@ function App() {
                 <div className="mt-6 space-y-4">
                   <div>
                     <h3 className="font-semibold text-sm mb-2">Badge URL</h3>
-                    <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg overflow-x-auto">
+                    <div className="bg-gray-100 dark:bg-black dark:text-cyan-500 p-3 rounded-lg overflow-x-auto">
                       <code className="text-sm font-mono break-all">
                         {badgeUrl}
                       </code>
@@ -305,7 +305,7 @@ function App() {
 
                   <div>
                     <h3 className="font-semibold text-sm mb-2">HTML Code</h3>
-                    <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg overflow-x-auto">
+                    <div className="bg-gray-100 dark:bg-black dark:text-cyan-500 p-3 rounded-lg overflow-x-auto">
                       <code className="text-sm font-mono break-all">
                         {htmlSnippet}
                       </code>
