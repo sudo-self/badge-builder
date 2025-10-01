@@ -59,19 +59,18 @@ function App() {
     return `https://img.shields.io/badge/${encodeURIComponent(label)}-${encodeURIComponent(message)}-${finalColor}${queryString}`;
   };
 
-const copyToClipboard = async () => {
-  try {
-    const badgeUrl = generateBadgeUrl();
-    const htmlSnippet = `<img src="${badgeUrl}" alt="${badgeConfig.label} - ${badgeConfig.message}" />`;
-    
-    await navigator.clipboard.writeText(htmlSnippet);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  } catch (err) {
-    console.error('Failed to copy: ', err);
-  }
-};
-
+  const copyToClipboard = async () => {
+    try {
+      const badgeUrl = generateBadgeUrl();
+      const htmlSnippet = `<img src="${badgeUrl}" alt="${badgeConfig.label} - ${badgeConfig.message}" />`;
+      
+      await navigator.clipboard.writeText(htmlSnippet);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  };
 
   const downloadBadge = () => {
     const link = document.createElement('a');
@@ -95,6 +94,9 @@ const copyToClipboard = async () => {
         ? 'bg-gray-700 border-gray-600 text-white' 
         : 'bg-white border-gray-300 text-gray-900'
     }`;
+
+  const badgeUrl = generateBadgeUrl();
+  const htmlSnippet = `<img src="${badgeUrl}" alt="${badgeConfig.label} - ${badgeConfig.message}" />`;
 
   return (
     <div className={`min-h-screen p-4 flex items-center justify-center transition-colors duration-300 ${
@@ -122,7 +124,7 @@ const copyToClipboard = async () => {
                 <p className={`text-sm ${
                   previewMode === 'dark' ? 'text-gray-400' : 'text-gray-600'
                 }`}>
-                 badge-build.netlify.app
+                  Create custom shields.io badges
                 </p>
               </div>
             </div>
@@ -179,6 +181,7 @@ const copyToClipboard = async () => {
                     value={badgeConfig.label}
                     onChange={e => updateBadgeConfig('label', e.target.value)}
                     className={getInputClasses()}
+                    placeholder="Enter label text"
                   />
                 </div>
                 <div>
@@ -188,6 +191,7 @@ const copyToClipboard = async () => {
                     value={badgeConfig.message}
                     onChange={e => updateBadgeConfig('message', e.target.value)}
                     className={getInputClasses()}
+                    placeholder="Enter message text"
                   />
                 </div>
               </div>
@@ -251,14 +255,8 @@ const copyToClipboard = async () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-3 p-4 rounded-lg border transition-colors duration-200 
-                    bg-opacity-50 border-opacity-50
-                    hover:bg-opacity-100 hover:border-opacity-100
-                    active:bg-opacity-100 active:border-opacity-100
-                    focus-within:bg-opacity-100 focus-within:border-opacity-100
-                    cursor-pointer
-                    bg-pink-50 border-pink-200 text-pink-800
-                    dark:bg-pink-900 dark:border-pink-700 dark:text-pink-200"
+                  <div
+                    className="flex items-center space-x-3 p-4 rounded-lg border transition-colors duration-200 cursor-pointer bg-pink-50 border-pink-200 text-pink-800 dark:bg-pink-900 dark:border-pink-700 dark:text-pink-200"
                     onClick={() => updateBadgeConfig('isError', !badgeConfig.isError)}
                   >
                     <div className={`w-5 h-5 border-2 rounded flex items-center justify-center transition-colors duration-200 ${
@@ -286,30 +284,34 @@ const copyToClipboard = async () => {
                   : 'bg-gray-50 border-gray-200'
               }`}>
                 <h2 className="text-lg font-semibold mb-4">Preview</h2>
-                <div className="flex justify-center p-4">
+                <div className="flex justify-center p-4 bg-white dark:bg-gray-800 rounded-lg">
                   <img
-                    src={generateBadgeUrl()}
+                    src={badgeUrl}
                     alt="Badge Preview"
                     className="max-w-full h-auto transition-transform duration-300 hover:scale-105"
                   />
                 </div>
-                      {/* Badge Syntax Display */}
-<div className="mt-4 space-y-2">
-  <h3 className="font-semibold text-md">Badge URL</h3>
-  <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg overflow-x-auto">
-    <code className="text-sm font-mono break-all">
-      {generateBadgeUrl()}
-    </code>
-  </div>
 
-  <h3 className="font-semibold text-md mt-2">HTML Usage</h3>
-  <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg overflow-x-auto">
-    <code className="text-sm font-mono break-all">
-      {`<img src="${generateBadgeUrl()}" alt="${badgeConfig.label} - ${badgeConfig.message}" />`}
-    </code>
-  </div>
-</div>
+                {/* Badge Syntax Display */}
+                <div className="mt-6 space-y-4">
+                  <div>
+                    <h3 className="font-semibold text-sm mb-2">Badge URL</h3>
+                    <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg overflow-x-auto">
+                      <code className="text-sm font-mono break-all">
+                        {badgeUrl}
+                      </code>
+                    </div>
+                  </div>
 
+                  <div>
+                    <h3 className="font-semibold text-sm mb-2">HTML Code</h3>
+                    <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg overflow-x-auto">
+                      <code className="text-sm font-mono break-all">
+                        {htmlSnippet}
+                      </code>
+                    </div>
+                  </div>
+                </div>
                 
                 <div className="mt-6 space-y-3">
                   <button
@@ -319,14 +321,12 @@ const copyToClipboard = async () => {
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                     </svg>
-                    <span>Copy Badge</span>
+                    <span>Copy HTML Code</span>
                   </button>
                   
                   <button
                     onClick={downloadBadge}
-                    className="w-full px-4 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center space-x-2
-                      border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900
-                      dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-300 dark:hover:text-white"
+                    className="w-full px-4 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center space-x-2 border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-300 dark:hover:text-white"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -346,7 +346,7 @@ const copyToClipboard = async () => {
           <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
           </svg>
-          <span>Badge URL copied to clipboard!</span>
+          <span>HTML code copied to clipboard!</span>
         </div>
       )}
 
