@@ -84,8 +84,8 @@ function App() {
   const getInputClasses = () =>
     `w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors duration-200 ${
       previewMode === 'dark' 
-        ? 'bg-gray-700 border-gray-600 text-white' 
-        : 'bg-white border-gray-300 text-gray-900'
+        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
     }`;
 
   const getSelectClasses = () =>
@@ -93,6 +93,18 @@ function App() {
       previewMode === 'dark' 
         ? 'bg-gray-700 border-gray-600 text-white' 
         : 'bg-white border-gray-300 text-gray-900'
+    }`;
+
+  const getLabelClasses = () =>
+    `block mb-2 font-semibold ${
+      previewMode === 'dark' ? 'text-gray-200' : 'text-gray-700'
+    }`;
+
+  const getTabClasses = (isActive) =>
+    `py-3 px-6 font-medium transition-colors duration-200 relative ${
+      isActive 
+        ? 'text-pink-600' 
+        : `${previewMode === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`
     }`;
 
   const badgeUrl = generateBadgeUrl();
@@ -151,16 +163,14 @@ function App() {
 
         <div className="p-6">
           {/* Tabs */}
-          <div className="flex border-b mb-8">
+          <div className={`flex border-b mb-8 ${
+            previewMode === 'dark' ? 'border-gray-700' : 'border-gray-200'
+          }`}>
             {['basic', 'advanced'].map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`py-3 px-6 font-medium transition-colors duration-200 relative ${
-                  activeTab === tab 
-                    ? 'text-pink-600' 
-                    : `${previewMode === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`
-                }`}
+                className={getTabClasses(activeTab === tab)}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 {activeTab === tab && (
@@ -175,7 +185,7 @@ function App() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block mb-2 font-semibold">Label</label>
+                  <label className={getLabelClasses()}>Label</label>
                   <input
                     type="text"
                     value={badgeConfig.label}
@@ -185,7 +195,7 @@ function App() {
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 font-semibold">Message</label>
+                  <label className={getLabelClasses()}>Message</label>
                   <input
                     type="text"
                     value={badgeConfig.message}
@@ -197,7 +207,7 @@ function App() {
               </div>
 
               <div>
-                <label className="block mb-2 font-semibold">Color</label>
+                <label className={getLabelClasses()}>Color</label>
                 <select
                   value={badgeConfig.color}
                   onChange={e => updateBadgeConfig('color', e.target.value)}
@@ -212,9 +222,11 @@ function App() {
               </div>
 
               {activeTab === 'advanced' && (
-                <div className="space-y-6 border-t pt-6">
+                <div className={`space-y-6 border-t pt-6 ${
+                  previewMode === 'dark' ? 'border-gray-700' : 'border-gray-200'
+                }`}>
                   <div>
-                    <label className="block mb-2 font-semibold">Style</label>
+                    <label className={getLabelClasses()}>Style</label>
                     <select
                       value={badgeConfig.style}
                       onChange={e => updateBadgeConfig('style', e.target.value)}
@@ -230,7 +242,7 @@ function App() {
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block mb-2 font-semibold">Logo</label>
+                      <label className={getLabelClasses()}>Logo</label>
                       <select
                         value={badgeConfig.logo}
                         onChange={e => updateBadgeConfig('logo', e.target.value)}
@@ -244,7 +256,7 @@ function App() {
                       </select>
                     </div>
                     <div>
-                      <label className="block mb-2 font-semibold">Logo Color</label>
+                      <label className={getLabelClasses()}>Logo Color</label>
                       <input
                         type="text"
                         value={badgeConfig.logoColor}
@@ -256,7 +268,11 @@ function App() {
                   </div>
 
                   <div
-                    className="flex items-center space-x-3 p-4 rounded-lg border transition-colors duration-200 cursor-pointer bg-pink-50 border-pink-200 text-pink-800 dark:bg-pink-900 dark:border-pink-700 dark:text-pink-200"
+                    className={`flex items-center space-x-3 p-4 rounded-lg border transition-colors duration-200 cursor-pointer ${
+                      previewMode === 'dark'
+                        ? 'bg-pink-900 border-pink-700 text-pink-200'
+                        : 'bg-pink-50 border-pink-200 text-pink-800'
+                    }`}
                     onClick={() => updateBadgeConfig('isError', !badgeConfig.isError)}
                   >
                     <div className={`w-5 h-5 border-2 rounded flex items-center justify-center transition-colors duration-200 ${
@@ -283,8 +299,12 @@ function App() {
                   ? 'bg-gray-900 border-gray-700' 
                   : 'bg-gray-50 border-gray-200'
               }`}>
-                <h2 className="text-lg font-semibold mb-4">Preview</h2>
-                <div className="flex justify-center p-4 bg-white dark:bg-gray-800 rounded-lg">
+                <h2 className={`text-lg font-semibold mb-4 ${
+                  previewMode === 'dark' ? 'text-gray-200' : 'text-gray-800'
+                }`}>Preview</h2>
+                <div className={`flex justify-center p-4 rounded-lg ${
+                  previewMode === 'dark' ? 'bg-gray-800' : 'bg-white'
+                }`}>
                   <img
                     src={badgeUrl}
                     alt="Badge Preview"
@@ -295,8 +315,12 @@ function App() {
                 {/* Badge Syntax Display */}
                 <div className="mt-6 space-y-4">
                   <div>
-                    <h3 className="font-semibold text-sm mb-2">Badge URL</h3>
-                    <div className="bg-gray-100 dark:bg-black dark:text-cyan-500 p-3 rounded-lg overflow-x-auto">
+                    <h3 className={`font-semibold text-sm mb-2 ${
+                      previewMode === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>Badge URL</h3>
+                    <div className={`p-3 rounded-lg overflow-x-auto ${
+                      previewMode === 'dark' ? 'bg-gray-900 text-cyan-400' : 'bg-gray-100 text-gray-800'
+                    }`}>
                       <code className="text-sm font-mono break-all">
                         {badgeUrl}
                       </code>
@@ -304,8 +328,12 @@ function App() {
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-sm mb-2">HTML Code</h3>
-                    <div className="bg-gray-100 dark:bg-black dark:text-cyan-500 p-3 rounded-lg overflow-x-auto">
+                    <h3 className={`font-semibold text-sm mb-2 ${
+                      previewMode === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>HTML Code</h3>
+                    <div className={`p-3 rounded-lg overflow-x-auto ${
+                      previewMode === 'dark' ? 'bg-gray-900 text-cyan-400' : 'bg-gray-100 text-gray-800'
+                    }`}>
                       <code className="text-sm font-mono break-all">
                         {htmlSnippet}
                       </code>
@@ -326,7 +354,11 @@ function App() {
                   
                   <button
                     onClick={downloadBadge}
-                    className="w-full px-4 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center space-x-2 border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-300 dark:hover:text-white"
+                    className={`w-full px-4 py-3 border-2 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center space-x-2 ${
+                      previewMode === 'dark'
+                        ? 'border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white'
+                        : 'border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900'
+                    }`}
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
